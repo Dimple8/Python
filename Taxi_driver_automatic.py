@@ -5,34 +5,43 @@ try:
 except ImportError:
     from ConfigParser import ConfigParser  # ver. < 3.0
 
+def fill_element(elementName, text):
+    elem = driver.find_element_by_name(elementName)
+    elem.clear()
+    elem.send_keys(text)
+
 # instantiate
 config = ConfigParser()
 
 # parse existing file
 config.read('settings.ini')
 
-# read values from a section
+# read values from a settings.ini file
 baseUrl = config.get('DEFAULT', 'Url')
-nameElement = config.get('DEFAULT', 'FullName_elementName')
-phoneElement = config.get('DEFAULT', 'Phone_elementName')
+name = config.get('DEFAULT', 'NameField')
+phone = config.get('DEFAULT', 'PhoneField')
 
+# open browser
 driver = webdriver.Safari()
 driver.get(baseUrl)
 
-# print(driver.title)
+print(driver.title)
 
-# driver.switch_to.frame(driver.find_element_by_xpath('//iframe[starts-with(@src, "https://forms.yandex.ru/surveys/10017467/?iframe=1&theme=&lang=ru&click_id=")]'))
+driver.switch_to.frame(driver.find_element_by_xpath('//iframe[starts-with(@src, "https://forms.yandex.ru/surveys/10017467/?iframe=1&theme=&lang=ru&click_id=")]'))
+
+fill_element(name, "Водитель_1")
+fill_element(phone, "8896464")
 
 # try:
-#     username = driver.find_element_by_name("answer_short_text_89867")
-#     username.clear()
-#     username.send_keys("Driver1")
+#     usernameElem = driver.find_element_by_name(nameElement)
+#     usernameElem.clear()
+#     usernameElem.send_keys("Driver1")
 
-#     username = driver.find_element_by_name("answer_phone_89868")
-#     username.clear()
-#     username.send_keys("12345678")
+#     phoneElem = driver.find_element_by_name(phoneElement)
+#     phoneElem.clear()
+#     phoneElem.send_keys("12345678")
 # except:
-#     print("Произошла ошибка при вводе данных элементу 'ФИО'.")
+#     print("Произошла ошибка при вводе данных элементу , 'ФИО'.")
 
-# driver.switch_to.default_content()
+driver.switch_to.default_content()
 driver.close()
