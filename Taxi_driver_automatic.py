@@ -22,7 +22,7 @@ def get_list_from_excel_file(excelFile):
     THIS_FOLDER = os.path.dirname(os.path.abspath(__file__))
     filePath = os.path.join(THIS_FOLDER, excelFile)
     excel_data_df = pandas.read_excel(filePath, usecols=['ФИО', 'Корректный телефон', 'Click ID'])
-    return excel_data_df.to_dict('record')
+    return excel_data_df.to_dict('records')
 
 
 # instantiate
@@ -36,6 +36,7 @@ config.read(settings)
 baseUrl = config.get('DEFAULT', 'Url')
 name = config.get('DEFAULT', 'NameField')
 phone = config.get('DEFAULT', 'PhoneField')
+timeout = config.getint('DEFAULT', 'Timeout')
 isSumbit = config.getboolean('DEFAULT', 'Sumbit')
 
 # get items from excel file
@@ -67,5 +68,5 @@ for item in items:
     logging.info("ФИО: {0}, Телефон: {1}, Ссылка: {2}".format(driverName, driverPhone, baseUrl + driverID))
 
     driver.switch_to.default_content()
-    time.sleep(3)
+    time.sleep(timeout)
 driver.close()
