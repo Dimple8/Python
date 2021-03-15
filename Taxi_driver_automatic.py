@@ -4,6 +4,7 @@ import os
 import pandas
 from collections import defaultdict
 import logging
+import time
 try:
     from configparser import ConfigParser
 except ImportError:
@@ -35,12 +36,14 @@ config.read(settings)
 baseUrl = config.get('DEFAULT', 'Url')
 name = config.get('DEFAULT', 'NameField')
 phone = config.get('DEFAULT', 'PhoneField')
+isSumbit = config.getboolean('DEFAULT', 'Sumbit')
 
 # get items from excel file
 items = get_list_from_excel_file('Data.xlsx')
 
 # open browser
 driver = webdriver.Safari()
+driver.maximize_window()
 
 for item in items:
     driverName = item['ФИО']
@@ -53,8 +56,16 @@ for item in items:
     # enter data
     fill_element(name, driverName)
     fill_element(phone, driverPhone)
-    # print('Обработаны данные для: ' + driverName + ' - ' + driverPhone)
-    # logging.info('Обработаны данные для: ' + driverName + ' - ' + driverPhone)
+
+    if isSumbit:
+        # click button        
+        submitButton = driver.find_element_by_xpath('//button[starts-with(@class, "button button_theme_action button_size_m button_role_submit i-bem button_js_inited")]')
+        submitButton.send_keys(Keys.RETURN) 
+
+    # write log
+    print("ФИО: {0}, Телефон: {1}, Ссылка: {2}".format(driverName, driverPhone, baseUrl + driverID))    
+    logging.info("ФИО: {0}, Телефон: {1}, Ссылка: {2}".format(driverName, driverPhone, baseUrl + driverID))
 
     driver.switch_to.default_content()
+    time.sleep(3)
 driver.close()
