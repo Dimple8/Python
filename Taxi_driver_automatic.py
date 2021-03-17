@@ -56,13 +56,22 @@ for item in items:
 
     # enter data
     fill_element(name, driverName)
-    fill_element(phone, driverPhone)
+    fill_element(phone, driverPhone) 
 
     if isSumbit:
-        # click button        
-        submitButton = driver.find_element_by_xpath('//button[starts-with(@class, "button button_theme_action button_size_m button_role_submit i-bem button_js_inited")]')
+        # click button                                   
+        submitButton = driver.find_element_by_xpath('//button[contains(@class,"button_role_submit")]')        
         submitButton.send_keys(Keys.RETURN) 
 
+        # try to get success message
+        try:
+            successMessage = driver.find_element_by_xpath('//div[starts-with(@class, "survey-success i-bem survey-success_js_inited")]')  
+        except Exception as exception:
+            print("Не удалось найти сообщение что заявка отправлена.")    
+            logging.info("Не удалось найти сообщение что заявка отправлена.") 
+            print(exception)
+            raise  
+           
     # write log
     print("ФИО: {0}, Телефон: {1}, Ссылка: {2}".format(driverName, driverPhone, baseUrl + driverID))    
     logging.info("ФИО: {0}, Телефон: {1}, Ссылка: {2}".format(driverName, driverPhone, baseUrl + driverID))
