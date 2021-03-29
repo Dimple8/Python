@@ -51,9 +51,9 @@ for item in items:
     driverPhone = item['Корректный телефон']
     driverID = item['Click ID']
 
-    driver.get(baseUrl + driverID)
-    driver.switch_to.frame(driver.find_element_by_xpath('//iframe[starts-with(@src, "https://forms.yandex.ru/surveys/10017467/?iframe=1&theme=&lang=ru&click_id=")]'))
-
+    driver.get(baseUrl + driverID) 
+    driver.switch_to.frame(driver.find_element_by_xpath('//iframe[contains(@src, "https://forms.yandex.ru")]'))
+  
     # enter data
     fill_element(name, driverName)
     fill_element(phone, driverPhone) 
@@ -65,7 +65,7 @@ for item in items:
 
         # try to get success message
         try:
-            successMessage = driver.find_element_by_xpath('//div[starts-with(@class, "survey-success i-bem survey-success_js_inited")]')  
+            successMessage = driver.find_element_by_xpath('//div[contains(@class, "survey-success")]')  
         except Exception as exception:
             print("Не удалось найти сообщение что заявка отправлена.")    
             logging.info("Не удалось найти сообщение что заявка отправлена.") 
